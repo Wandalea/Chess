@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess</title>
+    <link rel="stylesheet" href="chess.css">
+    <script src="chess.js"></script>
+</head>
+<body>
+    <div id="chessBoard">
+        <div id="0" class="chess-square"></div>
+        <div id="1" class="chess-square">1</div>
+        <div id="2" class="chess-square">2</div>
+        <div id="3" class="chess-square">3</div>
+        <div id="4" class="chess-square">4</div>
+        <div id="5" class="chess-square">5</div>
+        <div id="6" class="chess-square">6</div>
+        <div id="7" class="chess-square">7</div>
+        <div id="8" class="chess-square">8</div>
+        <div id="H" class="chess-square">H</div>
+        <div id="H1" class="chess-square">♜</div>
+        <div id="H2" class="chess-square">♞</div>
+        <div id="H3" class="chess-square">♝</div>
+        <div id="H4" class="chess-square">♛</div>
+        <div id="H5" class="chess-square">♚</div>
+        <div id="H6" class="chess-square">♝</div>
+        <div id="H7" class="chess-square">♞</div>
+        <div id="H8" class="chess-square">♜</div>
+        <div id="G" class="chess-square">G</div>
+        <div id="G1" class="chess-square">♟</div>
+        <div id="G2" class="chess-square">♟</div>
+        <div id="G3" class="chess-square">♟</div>
+        <div id="G4" class="chess-square">♟</div>
+        <div id="G5" class="chess-square">♟</div>
+        <div id="G6" class="chess-square">♟</div>
+        <div id="G7" class="chess-square">♟</div>
+        <div id="G8" class="chess-square">♟</div>
+        <div id="F" class="chess-square">F</div>
+        <div id="F1" class="chess-square"></div>
+        <div id="F2" class="chess-square"></div>
+        <div id="F3" class="chess-square"></div>
+        <div id="F4" class="chess-square"></div>
+        <div id="F5" class="chess-square"></div>
+        <div id="F6" class="chess-square"></div>
+        <div id="F7" class="chess-square"></div>
+        <div id="F8" class="chess-square"></div>
+        <div id="E" class="chess-square">E</div>
+        <div id="E1" class="chess-square"></div>
+        <div id="E2" class="chess-square"></div>
+        <div id="E3" class="chess-square"></div>
+        <div id="E4" class="chess-square"></div>
+        <div id="E5" class="chess-square"></div>
+        <div id="E6" class="chess-square"></div>
+        <div id="E7" class="chess-square"></div>
+        <div id="E8" class="chess-square"></div>
+        <div id="D" class="chess-square">D</div>
+        <div id="D1" class="chess-square"></div>
+        <div id="D2" class="chess-square"></div>
+        <div id="D3" class="chess-square"></div>
+        <div id="D4" class="chess-square"></div>
+        <div id="D5" class="chess-square"></div>
+        <div id="D6" class="chess-square"></div>
+        <div id="D7" class="chess-square"></div>
+        <div id="D8" class="chess-square"></div>
+        <div id="C" class="chess-square">C</div>
+        <div id="C1" class="chess-square"></div>
+        <div id="C2" class="chess-square"></div>
+        <div id="C3" class="chess-square"></div>
+        <div id="C4" class="chess-square"></div>
+        <div id="C5" class="chess-square"></div>
+        <div id="C6" class="chess-square"></div>
+        <div id="C7" class="chess-square"></div>
+        <div id="C8" class="chess-square"></div>
+        <div id="B" class="chess-square">B</div>
+        <div id="B1" class="chess-square">♙</div>
+        <div id="B2" class="chess-square">♙</div>
+        <div id="B3" class="chess-square">♙</div>
+        <div id="B4" class="chess-square">♙</div>
+        <div id="B5" class="chess-square">♙</div>
+        <div id="B6" class="chess-square">♙</div>
+        <div id="B7" class="chess-square">♙</div>
+        <div id="B8" class="chess-square">♙</div>
+        <div id="A" class="chess-square">A</div>
+        <div id="A1" class="chess-square">♖</div>
+        <div id="A2" class="chess-square">♘</div>
+        <div id="A3" class="chess-square">♗</div>
+        <div id="A4" class="chess-square">♕</div>
+        <div id="A5" class="chess-square">♔</div>
+        <div id="A6" class="chess-square">♗</div>
+        <div id="A7" class="chess-square">♘</div>
+        <div id="A8" class="chess-square">♖</div>
+    </div>
+
+    <!-- <table id="chessTable">
+        <tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr>
+        <tr><td>A</td><td>♜</td><td>♞</td><td>♝</td><td>♛</td><td>♚</td><td>♝</td><td>♞</td><td>♜</td></tr>
+        <tr><td>B</td><td>♟</td><td>♟</td><td>♟</td><td>♟</td><td>♟</td><td>♟</td><td>♟</td><td>♟</td></tr>
+        <tr><td>C</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>D</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>E</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>F</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        <tr><td>G</td><td>♙</td><td>♙</td><td>♙</td><td>♙</td><td>♙</td><td>♙</td><td>♙</td><td>♙</td></tr>
+        <tr><td>H</td><td>♖</td><td>♘</td><td>♗</td><td>♕</td><td>♔</td><td>♗</td><td>♘</td><td>♖</td></tr>
+    </table> -->
+</body>
+</html>
+<!-- 
+Name of the Piece	Unicode Representation	 U+ Code
+King	            ♔, ♚	                U+2654, U+265A
+Queen	            ♕, ♛	                U+2655, U+265B
+Rook	            ♖, ♜	                U+2656, U+265C
+Bishop	            ♗, ♝	                U+2657, U+265D
+Knight	            ♘, ♞	                U+2658, U+265E
+Pawn	            ♙, ♟	                U+2659, U+265F 
+-->

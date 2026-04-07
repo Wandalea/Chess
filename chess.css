@@ -1,0 +1,54 @@
+body {
+    background-color: rgb(149, 168, 147);
+}
+
+#chessBoard {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+}
+
+#chessBoard :nth-child(even){
+    background-color: grey;
+}
+
+#chessBoard :nth-child(odd){
+    background-color: white;
+}
+
+#chessBoard :nth-child(n):nth-child(-n+10){
+    background-color: lawngreen;
+}
+
+#chessBoard :nth-child(19){
+    background-color: lawngreen;
+}
+
+#chessBoard :nth-child(28){
+    background-color: lawngreen;
+}
+
+#chessBoard :nth-child(37){
+    background-color: lawngreen;
+}
+
+#chessBoard :nth-child(46){
+    background-color: lawngreen;
+}
+
+#chessBoard :nth-child(55){
+    background-color: lawngreen;
+}
+
+#chessBoard :nth-child(64){
+    background-color: lawngreen;
+}
+
+#chessBoard :nth-child(73){
+    background-color: lawngreen;
+}
+
+.chess-square {
+  padding: 0.2em;
+  font-size: 3em;
+  text-align: center;
+}
