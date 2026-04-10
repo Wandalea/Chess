@@ -1,4 +1,4 @@
-body {
+/* body {
     background-color: rgb(149, 168, 147);
 }
 
@@ -51,4 +51,33 @@ body {
   padding: 0.2em;
   font-size: 3em;
   text-align: center;
+} */
+
+
+#chessTable {
+    border-collapse: collapse;
+    
+}
+
+.light {
+    background-color: white;
+}
+
+.dark {
+    background-color: plum;
+}
+
+.legend {
+    
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .75;
+    ;
+    
+
+}
+
+.border {
+    border: 3px solid lime;
+    background-color: lime;
+
 }
