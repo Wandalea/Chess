@@ -1,58 +1,3 @@
-/* body {
-    background-color: rgb(149, 168, 147);
-}
-
-#chessBoard {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-}
-
-#chessBoard :nth-child(even){
-    background-color: grey;
-}
-
-#chessBoard :nth-child(odd){
-    background-color: white;
-}
-
-#chessBoard :nth-child(n):nth-child(-n+10){
-    background-color: lawngreen;
-}
-
-#chessBoard :nth-child(19){
-    background-color: lawngreen;
-}
-
-#chessBoard :nth-child(28){
-    background-color: lawngreen;
-}
-
-#chessBoard :nth-child(37){
-    background-color: lawngreen;
-}
-
-#chessBoard :nth-child(46){
-    background-color: lawngreen;
-}
-
-#chessBoard :nth-child(55){
-    background-color: lawngreen;
-}
-
-#chessBoard :nth-child(64){
-    background-color: lawngreen;
-}
-
-#chessBoard :nth-child(73){
-    background-color: lawngreen;
-}
-
-.chess-square {
-  padding: 0.2em;
-  font-size: 3em;
-  text-align: center;
-} */
-
 @font-face {
     font-family: "Cinzel";
     src: url("Fonts/Cinzel-VariableFont_wght.ttf") format("truetype");
@@ -60,10 +5,17 @@
     font-style: normal;
 }
 
+.light {
+    background-color: white;
+}
+
+.dark {
+    background-color: plum;
+}
+
 #chessTable {
     border-collapse: collapse;
     border: 6px solid lime;
-    
 }
 
 #chessTable td {
@@ -80,15 +32,11 @@
     vertical-align: middle;
 }
 
-.light {
-    background-color: white;
+.border {
+    background-color: lime;
 }
 
-.dark {
-    background-color: plum;
-}
-
-.legend {
+.legend { 
     font-family: "Cinzel", serif;
     font-size: 20px;
     font-weight: bold;
@@ -99,7 +47,6 @@
     vertical-align: middle;
     padding: 0;
     line-height: 1;
-    
 }
 
 .legend-side {
@@ -107,7 +54,19 @@
     width: 40px;
 }
 
-.border {
-    background-color: lime;
+#chessTable2 {
+    font-size: 4em;
+    border-collapse: collapse;
+}
 
+#chessTable2 td{
+    border: 2px solid black;
+}
+
+.chess-square {
+    text-align: center;
+    height: 100px;
+    max-height: 100px;
+    min-width: 100px;
+    width: 100px;
 }
