@@ -5,6 +5,69 @@
     font-style: normal;
 }
 
+/* body {
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    background-color: snow;
+} */
+
+.home {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 12px;
+    height:100vh;
+    
+}
+
+.title {
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 40px;
+    border-radius: 12px;
+    text-decoration: underline;
+    
+}
+
+.title a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: plum;
+    color: black;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.title a:hover {
+    background-color: lime;
+}
+
+h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.chess-types {
+    margin-top: 15px;
+}
+
+.chess-types a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: plum;
+    color: black;
+    text-decoration: none;
+    border-radius: 6px;
+}
+
+.chess-types a:hover {
+    background-color:  lime;
+}
+
 .light {
     background-color: white;
 }
@@ -15,7 +78,7 @@
 
 #chessTable2 {
     border-collapse: collapse;
-    border: 6px solid lime;
+    border: 6px solid lime;  
 }
 
 #chessTable2 th {
