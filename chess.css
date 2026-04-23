@@ -27,6 +27,28 @@ body {
     
 }
 
+.btn {
+    display: flex;
+    justify-content: center;
+    margin: 20px 5px;
+}
+
+.btn a, .btn button {
+    padding: 12px 30px;
+    font-size: 20px;
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+    background-color: plum;
+    border: 3px solid black;
+    border-radius: 20px;
+
+}
+
+.btn a:hover, .btn button:hover {
+    background-color: lime;
+}
+
 .title {
     text-align: center;
     background-color: rgba(255, 255, 255, 0.9);
