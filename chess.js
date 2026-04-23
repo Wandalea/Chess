@@ -43,6 +43,63 @@ class ChessBoard{
 };
 
 
+class Timer{
+    constructor(duration, timerId, toggleId){
+        this.duration = duration;
+        this.timerId = timerId
+        this.toggleId = toggleId
+        this.toggleId.addEventListener('click', this.handleClick)
+        this.intervalId = null
+        this.countingDown = false
+        this.minutes = null
+        this.seconds = null
+    };
+
+    convertTime = (event) => {
+        this.minutes = parseInt(this.duration / 60);
+        this.seconds = parseInt(this.duration % 60);
+        if (this.minutes < 10) {this.minutes = "0" + this.minutes;}
+        if (this.seconds < 10) {this.seconds = "0" + this.seconds;}
+    }
+
+    startTimer = (event) => {
+        this.countingDown = true
+        this.intervalId = setInterval(() => {  
+            this.convertTime()
+            --this.duration
+            this.timerId.textContent = this.minutes + ":" + this.seconds;
+            if (this.duration < 0) {
+                console.log("Times up!");
+                clearInterval(this.intervalId)
+                this.countingDown = false
+            }
+        }, 1000);
+    };
+
+    stopTimer = (event) => {
+        clearInterval(this.intervalId)
+        this.toggleId.textContent = "Play"
+        this.countingDown = false
+    };
+
+    addToTimer = (event) => {
+        this.duration += 20
+        console.log(this.duration);
+    }
+
+    handleClick = (event) => {
+        if(this.countingDown){
+            this.stopTimer()
+            this.addToTimer()
+            this.convertTime()
+            this.timerId.textContent = this.minutes + ":" + this.seconds;
+        } else {
+            this.startTimer()
+        }
+    }
+};
+
+
 function createPiece(board, symbol, side, type, position){
     piece = new ChessPiece(symbol, side, type, position)
     // Random Position
@@ -59,38 +116,52 @@ function createPiece(board, symbol, side, type, position){
 
 function populateBoard(board){
     // Create all pieces and add them to board
-    let Pawn1 = createPiece(board, "♙", "White", "Pawn", "B1");
-    let Pawn2 = createPiece(board, "♙", "White", "Pawn", "B2");
-    let Pawn3 = createPiece(board, "♙", "White", "Pawn", "B3");
-    let Pawn4 = createPiece(board, "♙", "White", "Pawn", "B4");
-    let Pawn5 = createPiece(board, "♙", "White", "Pawn", "B5");
-    let Pawn6 = createPiece(board, "♙", "White", "Pawn", "B6");
-    let Pawn7 = createPiece(board, "♙", "White", "Pawn", "B7");
-    let Pawn8 = createPiece(board, "♙", "White", "Pawn", "B8");
-    let Pawn9 = createPiece(board, "♟", "Black", "Pawn", "G1");
-    let Pawn10 = createPiece(board, "♟", "Black", "Pawn", "G2");
-    let Pawn11 = createPiece(board, "♟", "Black", "Pawn", "G3");
-    let Pawn12 = createPiece(board, "♟", "Black", "Pawn", "G4");
-    let Pawn13 = createPiece(board, "♟", "Black", "Pawn", "G5");
-    let Pawn14 = createPiece(board, "♟", "Black", "Pawn", "G6");
-    let Pawn15 = createPiece(board, "♟", "Black", "Pawn", "G7");
-    let Pawn16 = createPiece(board, "♟", "Black", "Pawn", "G8");
-    let Rook1 = createPiece(board, "♖", "White", "Rook", "A1");
-    let Rook2 = createPiece(board, "♖", "White", "Rook", "A8");
-    let Rook3 = createPiece(board, "♜", "Black", "Rook", "H1");
-    let Rook4 = createPiece(board, "♜", "Black", "Rook", "H8");
-    let Knight1 = createPiece(board, "♘", "White", "Knight", "A2");
-    let Knight2 = createPiece(board, "♘", "White", "Knight", "A7");
-    let Knight3 = createPiece(board, "♞", "Black", "Knight", "H2");
-    let Knight4 = createPiece(board, "♞", "Black", "Knight", "H7");
-    let Bishop1 = createPiece(board, "♗", "White", "Bishop", "A3");
-    let Bishop2 = createPiece(board, "♗", "White", "Bishop", "A6");
-    let Bishop3 = createPiece(board, "♝", "Black", "Bishop", "H3");
-    let Bishop4 = createPiece(board, "♝", "Black", "Bishop", "H6");
-    let Queen1 = createPiece(board, "♕", "White", "Queen", "A4");
-    let Queen2 = createPiece(board, "♛", "Black", "Queen", "H4");
-    let King1 = createPiece(board, "♔", "White", "King", "A5");
-    let King2 = createPiece(board, "♚", "Black", "King", "H5");
+    createPiece(board, "♙", "White", "Pawn", "B1");
+    createPiece(board, "♙", "White", "Pawn", "B2");
+    createPiece(board, "♙", "White", "Pawn", "B3");
+    createPiece(board, "♙", "White", "Pawn", "B4");
+    createPiece(board, "♙", "White", "Pawn", "B5");
+    createPiece(board, "♙", "White", "Pawn", "B6");
+    createPiece(board, "♙", "White", "Pawn", "B7");
+    createPiece(board, "♙", "White", "Pawn", "B8");
+    createPiece(board, "♟", "Black", "Pawn", "G1");
+    createPiece(board, "♟", "Black", "Pawn", "G2");
+    createPiece(board, "♟", "Black", "Pawn", "G3");
+    createPiece(board, "♟", "Black", "Pawn", "G4");
+    createPiece(board, "♟", "Black", "Pawn", "G5");
+    createPiece(board, "♟", "Black", "Pawn", "G6");
+    createPiece(board, "♟", "Black", "Pawn", "G7");
+    createPiece(board, "♟", "Black", "Pawn", "G8");
+    createPiece(board, "♖", "White", "Rook", "A1");
+    createPiece(board, "♖", "White", "Rook", "A8");
+    createPiece(board, "♜", "Black", "Rook", "H1");
+    createPiece(board, "♜", "Black", "Rook", "H8");
+    createPiece(board, "♘", "White", "Knight", "A2");
+    createPiece(board, "♘", "White", "Knight", "A7");
+    createPiece(board, "♞", "Black", "Knight", "H2");
+    createPiece(board, "♞", "Black", "Knight", "H7");
+    createPiece(board, "♗", "White", "Bishop", "A3");
+    createPiece(board, "♗", "White", "Bishop", "A6");
+    createPiece(board, "♝", "Black", "Bishop", "H3");
+    createPiece(board, "♝", "Black", "Bishop", "H6");
+    createPiece(board, "♕", "White", "Queen", "A4");
+    createPiece(board, "♛", "Black", "Queen", "H4");
+    createPiece(board, "♔", "White", "King", "A5");
+    createPiece(board, "♚", "Black", "King", "H5");
+};
+
+
+function resetGame() {
+    const chessSquare = document.querySelectorAll(".chess-square");
+
+    chessSquare.forEach(square => {
+        square.textContent ="";
+        square.style.background="";
+    });
+
+    board = new ChessBoard();
+    populateBoard(board);
+    console.log("Game restarted");
 };
 
 function resetGame() {
@@ -157,5 +228,10 @@ document.addEventListener("DOMContentLoaded", () => {
     board = new ChessBoard();
     populateBoard(board)
     console.log(board);
+
+    p1Timer = new Timer(300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
+    p2Timer = new Timer(120, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
+    console.log(p1Timer);
+    console.log(p2Timer);
 });
 
