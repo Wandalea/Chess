@@ -1,3 +1,8 @@
+let board;
+let pieceSelected;
+let previousTarget;
+let previousColor;
+
 class ChessPiece{
     constructor(symbol, side, type, position){
         this.symbol = symbol;
@@ -88,6 +93,18 @@ function populateBoard(board){
     let King2 = createPiece(board, "♚", "Black", "King", "H5");
 };
 
+function resetGame() {
+    const chessSquare = document.querySelectorAll(".chess-square");
+
+    chessSquare.forEach(square => {
+        square.textContent ="";
+        square.style.background="";
+    });
+
+    board = new ChessBoard();
+    populateBoard(board);
+    console.log("Game restarted");
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     let pieceSelected;
@@ -137,20 +154,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    board = new ChessBoard
+    board = new ChessBoard();
     populateBoard(board)
     console.log(board);
 });
 
-function resetGame() {
-    const chessSquare = document.querySelectorAll(".chess-square");
-
-    chessSquare.forEach(square => {
-        square.textContent ="";
-        square.style.background="";
-    });
-
-    board = new ChessBoard();
-    populateBoard(board);
-    console.log("Game restarted");
-}
