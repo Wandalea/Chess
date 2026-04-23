@@ -45,6 +45,20 @@ body {
     border-radius: 6px;
 }
 
+.restart-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.restart-btn button {
+    padding: 10px 30px;
+    border-radius: 12px;
+    background-color: plum;
+    color: black;
+
+}
+
 .title a:hover {
     background-color: lime;
 }
