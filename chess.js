@@ -141,3 +141,16 @@ document.addEventListener("DOMContentLoaded", () => {
     populateBoard(board)
     console.log(board);
 });
+
+function resetGame() {
+    const chessSquare = document.querySelectorAll(".chess-square");
+
+    chessSquare.forEach(square => {
+        square.textContent ="";
+        square.style.background="";
+    });
+
+    board = new ChessBoard();
+    populateBoard(board);
+    console.log("Game restarted");
+}
