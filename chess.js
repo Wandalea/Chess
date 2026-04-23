@@ -101,7 +101,7 @@ class Timer{
 
 
 function createPiece(board, symbol, side, type, position){
-    piece = new ChessPiece(symbol, side, type, position)
+   let piece = new ChessPiece(symbol, side, type, position);
     // Random Position
     // board_letters = ['A','B','C','D','E','F','G','H']
     // board_numbers = [1,2,3,4,5,6,7,8]
@@ -110,6 +110,7 @@ function createPiece(board, symbol, side, type, position){
     //     + board_numbers[Math.floor(Math.random()*8)]
     // );
     board.addToBoard(piece);
+    document.getElementById(position).textContent =symbol;
     return piece;
 };
 
@@ -159,6 +160,9 @@ function resetGame() {
         square.style.background="";
     });
 
+    pieceSelected = null;
+    previousTarget = null;
+    previousColor = null;
     board = new ChessBoard();
     populateBoard(board);
     console.log("Game restarted");
