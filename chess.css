@@ -1,0 +1,64 @@
+@font-face {
+    font-family: "Cinzel";
+    src: url("Fonts/Cinzel-VariableFont_wght.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+.light {
+    background-color: white;
+}
+
+.dark {
+    background-color: plum;
+}
+
+#chessTable2 {
+    border-collapse: collapse;
+    border: 6px solid lime;
+}
+
+#chessTable2 th {
+    padding: 0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.border {
+    background-color: lime;
+}
+
+.legend { 
+    font-family: "Cinzel", serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: black;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+    line-height: 1;
+}
+
+.legend-side {
+    font-size: 20px;
+    width: 40px;
+}
+
+#chessTable2 {
+    font-size: 4em;
+    border-collapse: collapse;
+}
+
+#chessTable2 td{
+    border: 2px solid black;
+}
+
+.chess-square {
+    text-align: center;
+    height: 100px;
+    max-height: 100px;
+    min-width: 100px;
+    width: 100px;
+}
