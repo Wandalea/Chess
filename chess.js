@@ -168,10 +168,38 @@ function resetGame() {
     console.log("Game restarted");
 };
 
+function forfeitGame() {
+    let confirmForfeit = confirm("Are you sure you want to forfeit the game?");
+
+    if(confirmForfeit){
+        const gameOver= document.getElementById("gameOver");
+        const gameOverText = document.getElementById("gameOverText");
+
+        gameOverText.textContent= "The other player won the game!";
+        gameOver.classList.remove("hidden");
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
         const resetBtn = document.getElementById("resetBtn");
-    resetBtn.addEventListener("click", resetGame);
+        resetBtn.addEventListener("click", resetGame);
+
+        const forfeitBtn = document.getElementById("forfeitBtn");
+        forfeitBtn.addEventListener("click", forfeitGame);
+
+        const gameOver = document.getElementById("gameOver");
+        
+        const playAgainBtn = document.getElementById("playAgainBtn");
+        playAgainBtn.addEventListener("click", () => { 
+            resetGame();
+            gameOver.classList.add("hidden");});
+
+        const homeBtn = document.getElementById("homeBtn");
+        homeBtn.addEventListener("click", () => {
+            window.location.href = "home.html";
+        });
 });
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
