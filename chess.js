@@ -168,18 +168,11 @@ function resetGame() {
     console.log("Game restarted");
 };
 
-function resetGame() {
-    const chessSquare = document.querySelectorAll(".chess-square");
+document.addEventListener("DOMContentLoaded", () => {
+        const resetBtn = document.getElementById("resetBtn");
+    resetBtn.addEventListener("click", resetGame);
+});
 
-    chessSquare.forEach(square => {
-        square.textContent ="";
-        square.style.background="";
-    });
-
-    board = new ChessBoard();
-    populateBoard(board);
-    console.log("Game restarted");
-}
 
 document.addEventListener("DOMContentLoaded", () => {
     let pieceSelected;
