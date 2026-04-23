@@ -59,6 +59,10 @@ body {
 
 }
 
+.restart-btn button:hover {
+    background-color: lime;
+}
+
 .title a:hover {
     background-color: lime;
 }
