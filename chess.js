@@ -9,6 +9,7 @@ class ChessPiece{
         this.initialCoords = this.coords
         this.isCaptured = false;
         board.addToBoard(this);
+        this.moveTo(this.coords, this.x, this.y)
     };
 
     moveTo(newCoords, x, y){
@@ -127,12 +128,17 @@ class Timer{
         if (this.seconds < 10) {this.seconds = "0" + this.seconds;}
     }
 
+    updateDisplay = (event) => {
+        this.timerId.textContent = this.minutes + ":" + this.seconds;
+    }
+
     startTimer = (event) => {
         this.countingDown = true
         this.intervalId = setInterval(() => {  
             this.convertTime()
             --this.duration
-            this.timerId.textContent = this.minutes + ":" + this.seconds;
+            this.updateDisplay()
+            this.toggleId.textContent = "Pause"
             if (this.duration < 0) {
                 console.log("Times up!");
                 clearInterval(this.intervalId)
@@ -157,7 +163,7 @@ class Timer{
             this.stopTimer()
             this.addToTimer()
             this.convertTime()
-            this.timerId.textContent = this.minutes + ":" + this.seconds;
+            this.updateDisplay()
         } else {
             this.startTimer()
         }
@@ -202,19 +208,24 @@ function populateBoard(board){
 };
 
 
-function resetGame() {
-    const chessSquare = document.querySelectorAll(".chess-square");
-
-    chessSquare.forEach(square => {
-        square.textContent ="";
-        square.style.background="";
+function resetGame(p1Timer, p2Timer) {
+    document.querySelectorAll(".chess-square").forEach(cell => {
+        cell.textContent ="";
+        cell.style.background="";
     });
 
     pieceSelected = null;
     previousTarget = null;
     previousColor = null;
+    
     board = new ChessBoard();
     populateBoard(board);
+
+    p1Timer.stopTimer();
+    p2Timer.stopTimer();
+    p1Timer.duration = 300;
+    p2Timer.duration = 300;
+
     console.log("Game restarted");
 };
 
@@ -235,23 +246,6 @@ function forfeitGame() {
 document.addEventListener("DOMContentLoaded", () => {
     board = new ChessBoard
     populateBoard(board)
-
-    const gameOver = document.getElementById("gameOver");
-    document.getElementById("resetBtn").addEventListener("click", resetGame);
-    document.getElementById("forfeitBtn").addEventListener("click", forfeitGame);
-    document.getElementById("playAgainBtn").addEventListener("click", () => { 
-        resetGame();
-        gameOver.classList.add("hidden");
-    });
-
-    const homeBtn = document.getElementById("homeBtn");
-    homeBtn.addEventListener("click", () => {
-        window.location.href = "home.html";
-    });
-
-
-
-
     
     let pieceSelected;
     let previousTarget;
@@ -295,5 +289,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     p1Timer = new Timer(300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
-    p2Timer = new Timer(120, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
+    p2Timer = new Timer(300, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
+
+    document.getElementById("resetBtn").addEventListener("click", resetGame);
+    document.getElementById("forfeitBtn").addEventListener("click", forfeitGame);
+    document.getElementById("playAgainBtn").addEventListener("click", () => { 
+        resetGame(p1Timer, p2Timer);
+        document.getElementById("gameOver").classList.add("hidden");
+    });
+
+    document.getElementById("homeBtn").addEventListener("click", () => {
+        window.location.href = "home.html";
+    });
+
 });
