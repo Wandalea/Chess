@@ -64,7 +64,7 @@ class Rook extends ChessPiece{
     calculateValidMoves = (event) => {     
         if (this.validMoves){
             this.validMoves = []
-        }   
+        }
         this.validMoves.push(this.x + (this.y + 1).toString())
     }
 }
@@ -163,7 +163,7 @@ class Timer{
         this.countingDown = false
         this.minutes = null
         this.seconds = null
-        if (window.location.href === "blitzChess.html"){
+        if (window.document.title === "Blitz Chess"){
             this.toggleId.addEventListener('click', this.handleClick)
         }
     };
@@ -267,7 +267,7 @@ function resetGame(p1Timer = null, p2Timer = null) {
     
     board = new ChessBoard();
     populateBoard(board);
-    if (window.location.href === "blitzChess.html"){
+    if (window.document.title === "Blitz Chess"){
         p1Timer.stopTimer();
         p2Timer.stopTimer();
         p1Timer.duration = 300;
@@ -345,7 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("resetBtn").addEventListener("click", resetGame);
     document.getElementById("forfeitBtn").addEventListener("click", forfeitGame);
-    if (window.location.href === "chess.html"){
+    if (window.document.title === "Chess"){
         document.getElementById("playAgainBtn").addEventListener("click", () => { 
             resetGame();
             document.getElementById("gameOver").classList.add("hidden");
