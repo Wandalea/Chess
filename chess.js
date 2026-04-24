@@ -267,6 +267,7 @@ class Timer{
     constructor(name, duration, timerId, toggleId){
         this.name = name;
         this.duration = duration;
+        this.initialDuration = this.duration
         this.timerId = timerId;
         this.toggleId = toggleId;
         
@@ -323,7 +324,11 @@ class Timer{
     };
 
     addToTimer = (event) => {
-        this.duration += 3
+        if (this.duration + 3 > this.initialDuration){
+            this.duration = this.initialDuration
+        } else {
+            this.duration += 3
+        }
     }
 
     handleClick = (event, other) => {
