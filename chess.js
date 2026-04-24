@@ -29,15 +29,14 @@ class ChessPiece{
         let blackCount = 0
         for (let piece of board.getBoard()){
             if (piece.side === "White"){
-                whiteCount++
-                console.log(`White Count: ${whiteCount}`);
-                
+                whiteCount++ 
             }
             if (piece.side === "Black"){
                 blackCount++
-                console.log(`Black Count: ${blackCount}`);
             }
         }
+        console.log(`White Pieces Remaining: ${whiteCount}`);
+        console.log(`Black Pieces Remaining: ${blackCount}`);
         if (whiteCount == 0){
             const gameOver= document.getElementById("gameOver");
             const gameOverText = document.getElementById("gameOverText");
@@ -268,9 +267,69 @@ class Queen extends ChessPiece{
 
     calculateValidMoves = (event) => {
         this.validMoves = []
+        
+        // Up
+        for (let i = this.y; i > 0; i--){
+            // console.log(this.y - i)
+            if (this.y - i > 0){
+                let target = (this.x) + (this.y - i).toString()
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                } else {
+                    break
+                }   
+            } 
+        }
+
+        // Down
+        for (let i = this.y; i < 9; i++){
+            // console.log(this.y + i)
+            if (this.y + i < 9){
+                let target = (this.x) + (this.y + i).toString()
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                } else {
+                    break
+                }  
+            }  
+        }
+
+        // Left
+        for (let i = this.x; i > 0; i--){
+            // console.log(this.x - i)
+            if (this.x - i > 0){
+                let target = (this.x - i) + (this.y).toString()
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                } else {
+                    break
+                }
+            }
+        }
+
+        // Right
+        for (let i = this.x; i < 9; i++){
+            // console.log(this.x + i)
+            if (this.x + i < 9){
+                let target = (this.x + i) + (this.y).toString()
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                } else {
+                    break
+                }  
+            }
+        }
+        if (this.side === "White"){
+            for (let move of this.validMoves){
+                board.addWhiteMoves(move)
+            }
+        } else if (this.side === "Black") {
+            for (let move of this.validMoves){
+                board.addBlackMoves(move)
+            }
+        } 
     }
 }
-
 
 class King extends ChessPiece{
     constructor(board, symbol, side, type, x, y){
