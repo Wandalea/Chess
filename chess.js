@@ -20,11 +20,11 @@ class ChessPiece{
         document.getElementById(this.coords).textContent = this.symbol;
     };
 
-    capture(){
-        this.isCaptured = true;
-        this.moveTo("0")
+    capture(piece){
+        piece.isCaptured = true;
+        piece.moveTo("0")
         document.getElementById("0").textContent = null;
-        board.removeFromBoard(this)
+        board.removeFromBoard(piece)
         let whiteCount = 0
         let blackCount = 0
         for (let piece of board.getBoard()){
@@ -267,7 +267,7 @@ class Queen extends ChessPiece{
 
     calculateValidMoves = (event) => {
         this.validMoves = []
-        
+
         // Up
         for (let i = this.y; i > 0; i--){
             // console.log(this.y - i)
@@ -453,6 +453,7 @@ class ChessBoard{
         this.#board = [];
         this.#whiteMoves = [];
         this.#blackMoves = [];
+        this.turn = "White"
     };
 
     addToBoard(piece){
@@ -497,11 +498,19 @@ class ChessBoard{
     addBlackMoves = (move) => {
         this.#blackMoves.push(move)
     }
+
+    getTurn = () => {
+        return this.turn
+    }
+
+    setTurn = (turn) => {
+        this.turn = turn
+    }
 };
 
 
 class Timer{
-    constructor(name, duration, timerId, toggleId){
+    constructor(board, name, duration, timerId, toggleId){
         this.name = name;
         this.duration = duration;
         this.initialDuration = this.duration
@@ -558,6 +567,11 @@ class Timer{
         this.toggleId.textContent = "Waiting"
         this.countingDown = false
         this.other.startTimer()
+        if(this.name === "p1Timer"){
+            board.setTurn("Black")
+        } else {
+            board.setTurn("White")
+        }
     };
 
     addToTimer = (event) => {
@@ -568,7 +582,7 @@ class Timer{
         }
     }
 
-    handleClick = (event, other) => {
+    handleClick = (event) => {
         if(this.countingDown){
             this.stopTimer()
             this.addToTimer()
@@ -672,80 +686,97 @@ document.addEventListener("DOMContentLoaded", () => {
                 const coords = x.toString()+y;
                 const currentCell = event.currentTarget;
                 const clickedPiece = board.getBoard().find(piece => piece.coords === coords);
-
-                    if (clickedPiece && !pieceSelected){
+                const turn = board.getTurn()
+   
+                if (clickedPiece && !pieceSelected){
+                    if (clickedPiece.side === turn){
                         pieceSelected = clickedPiece;
                         previousTarget = currentCell;
                         previousColor = getComputedStyle(currentCell).getPropertyValue("background-color");
                         currentCell.style.background = "green";
-                        
+
                         pieceSelected.calculateValidMoves();
                         console.log(`Valid Moves: ${pieceSelected.validMoves}`);
                         console.log(`Selected Cell: ${coords}`);
                     }
+                }
 
-                    // If empty square is clicked and a piece is selected
-                    else if (pieceSelected && !clickedPiece){
-                        if (pieceSelected.validMoves.includes(coords)){
-                            pieceSelected.moveTo(currentCell.id, x, y)
-                            console.log(`Move To: ${currentCell.id} Coords: ${coords}`)
-                            previousTarget.textContent = ""
-                            previousTarget.style.background = previousColor;
-                            pieceSelected = null
-                            previousTarget = null;
-                        } else {
-                            console.log("invalid move");
-                        }
-                    }
-
-                    else if (pieceSelected && clickedPiece && pieceSelected.side !== clickedPiece.side){
-                        clickedPiece.capture(clickedPiece)
+                // If empty square is clicked and a piece is selected
+                else if (pieceSelected && !clickedPiece){
+                    if (pieceSelected.validMoves.includes(coords)){
                         pieceSelected.moveTo(currentCell.id, x, y)
                         console.log(`Move To: ${currentCell.id} Coords: ${coords}`)
                         previousTarget.textContent = ""
                         previousTarget.style.background = previousColor;
                         pieceSelected = null
                         previousTarget = null;
+                        board.setTurn(null)
+                    } else {
+                        console.log("invalid move");
                     }
+                }
 
-                    // If same square clicked back to back
-                    else if (clickedPiece === pieceSelected){
-                        pieceSelected = null
-                        previousTarget.style.background = previousColor;
-                    }
-                    board.clearWhiteMoves()
-                    board.clearBlackMoves()
-                    for (let piece of board.getBoard()){
-                        piece.calculateValidMoves()
-                    }
-                    // console.log(`White Moves: ${board.getWhiteMoves()}`)
-                    // console.log(`Black Moves: ${board.getBlackMoves()}`)
-            });
+                else if (pieceSelected && clickedPiece && pieceSelected.side !== clickedPiece.side){
+                    clickedPiece.capture(clickedPiece)
+                    // Automatic turn switching
+                    // if(board.getTurn() === "White"){
+                    //     p1Timer.handleClick()
+                    // } else {
+                    //     p2Timer.handleClick()
+                    // }
+                    pieceSelected.moveTo(currentCell.id, x, y)
+                    console.log(`Move To: ${currentCell.id} Coords: ${coords}`)
+                    previousTarget.textContent = ""
+                    previousTarget.style.background = previousColor;
+                    pieceSelected = null
+                    previousTarget = null;
+                    board.setTurn(null)
+                }
+
+                // If same square clicked back to back
+                else if (clickedPiece === pieceSelected){
+                    pieceSelected = null
+                    previousTarget.style.background = previousColor;
+                }
+                board.clearWhiteMoves()
+                board.clearBlackMoves()
+                for (let piece of board.getBoard()){
+                    piece.calculateValidMoves()
+                }
+
+                // Recalculate all valid moves
+                board.clearWhiteMoves()
+                board.clearBlackMoves()
+                for (let piece of board.getBoard()){
+                    piece.calculateValidMoves()
+                }
+            }) 
+        })
+    };
+ 
+    
+    document.getElementById("resetBtn").addEventListener("click", resetGame);
+    document.getElementById("forfeitBtn").addEventListener("click", forfeitGame);
+
+    if (window.document.title === "Chess"){
+        document.getElementById("playAgainBtn").addEventListener("click", () => { 
+            resetGame();
+            document.getElementById("gameOver").classList.add("hidden");
         });
+    } 
+    else {
+        p1Timer = new Timer(board, "p1Timer", 300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
+        p2Timer = new Timer(board, "p2Timer", 300, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
+        p1Timer.other = p2Timer
+        p2Timer.other = p1Timer
 
+        document.getElementById("playAgainBtn").addEventListener("click", () => { 
+            resetGame(p1Timer, p2Timer);
+            document.getElementById("gameOver").classList.add("hidden");
+        });
+    }
 
-        document.getElementById("resetBtn").addEventListener("click", resetGame);
-        document.getElementById("forfeitBtn").addEventListener("click", forfeitGame);
-        if (window.document.title === "Chess"){
-            document.getElementById("playAgainBtn").addEventListener("click", () => { 
-                resetGame();
-                document.getElementById("gameOver").classList.add("hidden");
-            });
-        } else {
-            p1Timer = new Timer("p1Timer", 300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
-            p2Timer = new Timer("p2Timer", 300, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
-            p1Timer.other = p2Timer
-            p2Timer.other = p1Timer
-
-            document.getElementById("playAgainBtn").addEventListener("click", () => { 
-                resetGame(p1Timer, p2Timer);
-                document.getElementById("gameOver").classList.add("hidden");
-            });
-        }
-
-
-        document.getElementById("homeBtn").addEventListener("click", () => {
+    document.getElementById("homeBtn").addEventListener("click", () => {
             window.location.href = "home.html";
-        });
-   }
+    });
 });
