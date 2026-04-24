@@ -5,11 +5,11 @@ class ChessPiece{
         this.type = type;
         this.x = x;
         this.y = y;
-        this.coords = x.toString() + this.y
-        this.initialCoords = this.coords
+        this.coords = x.toString() + this.y;
+        this.initialCoords = this.coords;
         this.isCaptured = false;
         board.addToBoard(this);
-        this.moveTo(this.coords, this.x, this.y)
+        this.moveTo(this.coords, this.x, this.y);
     };
 
     moveTo(newCoords, x, y){
@@ -51,6 +51,12 @@ class Pawn extends ChessPiece{
                 }       
             }
         } else {
+            if (this.coords === this.initialCoords){
+                let target = (this.x + (this.y - 2).toString())
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                } 
+            }
             if (this.y - 1 > 0){
                 let target = this.x + (this.y - 1).toString()
                 if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
@@ -58,6 +64,15 @@ class Pawn extends ChessPiece{
                 }     
             }
         }
+        if (this.side === "White"){
+            for (let move of this.validMoves){
+                board.addWhiteMoves(move)
+            }
+        } else if (this.side === "Black") {
+            for (let move of this.validMoves){
+                board.addBlackMoves(move)
+            }
+        }  
     }
 }
 
@@ -73,7 +88,7 @@ class Rook extends ChessPiece{
 
         // Up
         for (let i = this.y; i > 0; i--){
-            console.log(this.y - i)
+            // console.log(this.y - i)
             if (this.y - i > 0){
                 let target = (this.x) + (this.y - i).toString()
                 if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
@@ -86,7 +101,7 @@ class Rook extends ChessPiece{
 
         // Down
         for (let i = this.y; i < 9; i++){
-            console.log(this.y + i)
+            // console.log(this.y + i)
             if (this.y + i < 9){
                 let target = (this.x) + (this.y + i).toString()
                 if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
@@ -98,9 +113,8 @@ class Rook extends ChessPiece{
         }
 
         // Left
-
         for (let i = this.x; i > 0; i--){
-            console.log(this.x - i)
+            // console.log(this.x - i)
             if (this.x - i > 0){
                 let target = (this.x - i) + (this.y).toString()
                 if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
@@ -112,18 +126,26 @@ class Rook extends ChessPiece{
         }
 
         // Right
-
         for (let i = this.x; i < 9; i++){
-            console.log(this.x + i)
+            // console.log(this.x + i)
             if (this.x + i < 9){
                 let target = (this.x + i) + (this.y).toString()
                 if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
                     this.validMoves.push(target)
                 } else {
                     break
-                }    
+                }  
             }
         }
+        if (this.side === "White"){
+            for (let move of this.validMoves){
+                board.addWhiteMoves(move)
+            }
+        } else if (this.side === "Black") {
+            for (let move of this.validMoves){
+                board.addBlackMoves(move)
+            }
+        }  
     }
 }
 
@@ -206,10 +228,8 @@ class Bishop extends ChessPiece{
         this.validMoves = []
     }  
     
-    calculateValidMoves = (event) => {     
-        if (this.validMoves){
-            this.validMoves = []
-        }
+    calculateValidMoves = (event) => {
+        this.validMoves = []
     }
 }
 
@@ -220,10 +240,8 @@ class Queen extends ChessPiece{
         this.validMoves = []
     }
 
-    calculateValidMoves = (event) => {     
-        if (this.validMoves){
-            this.validMoves = []
-        }
+    calculateValidMoves = (event) => {
+        this.validMoves = []
     }
 }
 
@@ -234,9 +252,108 @@ class King extends ChessPiece{
         this.validMoves = []
     } 
     
-    calculateValidMoves = (event) => {     
-        if (this.validMoves){
-            this.validMoves = []
+    calculateValidMoves = (event) => {
+        this.validMoves = []
+
+        // +1 Y
+        if (this.y + 1 < 9){
+            let target = this.x + (this.y + 1).toString()
+            if (!this.checkDanger(target)){
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                }
+            }
+        }
+
+        if (this.x - 1 > 0 && this.y + 1 < 9){
+            let target = (this.x - 1) + (this.y + 1).toString()
+            if (!this.checkDanger(target)){
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                }
+            }
+        }
+
+        if (this.x + 1 < 9 && this.y + 1 < 9){
+            let target = (this.x + 1) + (this.y + 1).toString()
+            if (!this.checkDanger(target)){
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                }
+            }
+        }
+
+        // Same Y
+        if (this.x -1 > 0){
+            let target = (this.x - 1) + (this.y).toString()
+            if (!this.checkDanger(target)){
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                }
+            }
+        }
+
+        if (this.x + 1 < 9){
+            let target = (this.x + 1) + (this.y).toString()
+            if (!this.checkDanger(target)){
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                }
+            }
+        }
+
+        // -1 Y
+        if (this.x - 1 > 0 && this.y - 1 > 0){
+            let target = (this.x - 1) + (this.y - 1).toString()
+            if (!this.checkDanger(target)){
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                }
+            }
+        }
+
+        if (this.y - 1 > 0){
+            let target = (this.x) + (this.y - 1).toString()
+            if (!this.checkDanger(target)){
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                }
+            }
+        }
+
+        if (this.x + 1 < 9 && this.y - 1 > 0){
+            let target = (this.x + 1) + (this.y - 1).toString()
+            if (!this.checkDanger(target)){
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                }
+            }
+        }
+
+        if (this.side === "White"){
+            for (let move of this.validMoves){
+                board.addWhiteMoves(move)
+            }
+        } else if (this.side === "Black") {
+            for (let move of this.validMoves){
+                board.addBlackMoves(move)
+            }
+        }
+    }
+
+    checkDanger = (target) => {
+        if (this.side === "White"){
+            if (target in board.getBlackMoves()){
+                return true
+            } else {
+                return false
+            }
+        } else if (this.side === "Black"){
+            if (target in board.getWhiteMoves()){
+                return true
+            } else {
+                return false
+            }
         }
     }
 }
@@ -244,9 +361,13 @@ class King extends ChessPiece{
 
 class ChessBoard{
     #board; // Declare private attribute
+    #whiteMoves;
+    #blackMoves;
 
     constructor(){
         this.#board = [];
+        this.#whiteMoves = [];
+        this.#blackMoves = [];
     };
 
     addToBoard(piece){
@@ -259,6 +380,30 @@ class ChessBoard{
 
     getBoard = () => {
         return this.#board
+    }
+
+    getWhiteMoves = () => {
+        return this.#whiteMoves
+    }
+
+    clearWhiteMoves = () => {
+        this.#whiteMoves = []
+    }
+
+    addWhiteMoves = (move) => {
+        this.#whiteMoves.push(move)
+    }
+
+    getBlackMoves = () => {
+        return this.#blackMoves
+    }
+
+    clearBlackMoves = () => {
+        this.#blackMoves = []
+    }
+
+    addBlackMoves = (move) => {
+        this.#blackMoves.push(move)
     }
 };
 
@@ -476,6 +621,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         pieceSelected = null
                         previousTarget.style.background = previousColor;
                     }
+                    board.clearWhiteMoves()
+                    board.clearBlackMoves()
+                    for (let piece of board.getBoard()){
+                        piece.calculateValidMoves()
+                    }
+                    console.log(`White Moves: ${board.getWhiteMoves()}`)
+                    console.log(`Black Moves: ${board.getBlackMoves()}`)
             });
         });
 
