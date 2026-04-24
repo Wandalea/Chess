@@ -38,12 +38,19 @@ class Pawn extends ChessPiece{
         if (this.validMoves){
             this.validMoves = []
         }   
-        if (this.coords === this.initialCoords){
-            if (this.side === "Black"){    
-                this.validMoves.push(this.x + (this.y + 2).toString())
-            }
+        if (this.side === "Black"){  
+            if (this.coords === this.initialCoords){
+                    this.validMoves.push(this.x + (this.y + 2).toString())
+                }
+                this.validMoves.push(this.x + (this.y + 1).toString())
+        } else {
+            if (this.coords === this.initialCoords){
+                    this.validMoves.push(this.x + (this.y - 2).toString())
+                }
+                this.validMoves.push(this.x + (this.y - 1).toString())
         }
-        this.validMoves.push(this.x + (this.y + 1).toString())
+        
+        
     }
 }
 
@@ -53,7 +60,15 @@ class Rook extends ChessPiece{
         super(board, symbol, side, type, x, y)
         this.validMoves = []
     }
+
+    calculateValidMoves = (event) => {     
+        if (this.validMoves){
+            this.validMoves = []
+        }   
+        this.validMoves.push(this.x + (this.y + 1).toString())
+    }
 }
+
 
 
 class Knight extends ChessPiece{
@@ -61,6 +76,13 @@ class Knight extends ChessPiece{
         super(board, symbol, side, type, x, y)
         this.validMoves = []
     }   
+    
+    calculateValidMoves = (event) => {     
+        if (this.validMoves){
+            this.validMoves = []
+        }   
+        this.validMoves.push(this.x + (this.y + 1).toString())
+    }
 }
 
 
@@ -68,7 +90,15 @@ class Bishop extends ChessPiece{
     constructor(board, symbol, side, type, x, y){
         super(board, symbol, side, type, x, y)
         this.validMoves = []
-    }    
+    }  
+    
+    calculateValidMoves = (event) => {     
+        if (this.validMoves){
+            this.validMoves = []
+        }   
+        
+        this.validMoves.push(this.x + (this.y + 1).toString())
+    }
 }
 
 
@@ -76,7 +106,14 @@ class Queen extends ChessPiece{
     constructor(board, symbol, side, type, x, y){
         super(board, symbol, side, type, x, y)
         this.validMoves = []
-    }    
+    }
+
+    calculateValidMoves = (event) => {     
+        if (this.validMoves){
+            this.validMoves = []
+        }   
+        this.validMoves.push(this.x + (this.y + 1).toString())
+    }
 }
 
 
@@ -84,7 +121,14 @@ class King extends ChessPiece{
     constructor(board, symbol, side, type, x, y){
         super(board, symbol, side, type, x, y)
         this.validMoves = []
-    }    
+    } 
+    
+    calculateValidMoves = (event) => {     
+        if (this.validMoves){
+            this.validMoves = []
+        }   
+        this.validMoves.push(this.x + (this.y + 1).toString())
+    }
 }
 
 
@@ -247,9 +291,9 @@ document.addEventListener("DOMContentLoaded", () => {
     board = new ChessBoard
     populateBoard(board)
     
-    let pieceSelected;
-    let previousTarget;
-    let previousColor;
+    let pieceSelected = null;
+    let previousTarget = null;
+    let previousColor = null;
     document.querySelectorAll('td').forEach(cell => {
         cell.addEventListener('click', function(event) {
             const x = cell.cellIndex;
@@ -263,13 +307,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     previousTarget = currentCell;
                     previousColor = getComputedStyle(currentCell).getPropertyValue("background-color");
                     currentCell.style.background = "green";
+                    console.log(currentCell);
+                    
+                    
                     pieceSelected.calculateValidMoves();
                     console.log(`Valid Moves: ${pieceSelected.validMoves}`);
                     console.log(`Selected Cell: ${coords}`);
                 }
 
                 // If empty square is clicked and a piece is selected
-                if (pieceSelected && !clickedPiece){
+                else if (pieceSelected && !clickedPiece){
                     if (pieceSelected.validMoves.includes(coords)){
                         pieceSelected.moveTo(currentCell.id, x, y)
                         console.log(`Move To: ${currentCell.id} Coords: ${coords}`)
@@ -277,11 +324,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         previousTarget.style.background = previousColor;
                         pieceSelected = null
                         previousTarget = null;
+                    } else {
+                        console.log("invalid move");
                     }
                 }
 
                 // If same square clicked back to back
-                if (clickedPiece === pieceSelected){
+                else if (clickedPiece === pieceSelected){
                     pieceSelected = null
                     previousTarget.style.background = previousColor;
                 }
