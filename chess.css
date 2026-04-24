@@ -234,3 +234,7 @@ h1 {
 .timer button:hover {
     background-color: lime;
 }
+
+.timer button:disabled {
+    background-color: rgb(164, 164, 164);
+}
