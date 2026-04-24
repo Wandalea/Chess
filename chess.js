@@ -12,7 +12,7 @@ class ChessPiece{
         this.moveTo(this.coords, this.x, this.y);
     };
 
-    moveTo(newCoords, x, y){
+    moveTo(newCoords, x = null, y = null){
         document.getElementById(this.coords).textContent = null;
         this.coords = newCoords;
         this.x = x;
@@ -22,8 +22,36 @@ class ChessPiece{
 
     capture(){
         this.isCaptured = true;
-        // document.getElementById(this.coords).textContent = null;
-        this.position = document.getElementById("0");
+        this.moveTo("0")
+        document.getElementById("0").textContent = null;
+        board.removeFromBoard(this)
+        let whiteCount = 0
+        let blackCount = 0
+        for (let piece of board.getBoard()){
+            if (piece.side === "White"){
+                whiteCount++
+                console.log(`White Count: ${whiteCount}`);
+                
+            }
+            if (piece.side === "Black"){
+                blackCount++
+                console.log(`Black Count: ${blackCount}`);
+            }
+        }
+        if (whiteCount == 0){
+            const gameOver= document.getElementById("gameOver");
+            const gameOverText = document.getElementById("gameOverText");
+
+            gameOverText.textContent= "Player 2 Wins!";
+            gameOver.classList.remove("hidden");
+        }
+        if (blackCount == 0){
+            const gameOver= document.getElementById("gameOver");
+            const gameOverText = document.getElementById("gameOverText");
+
+            gameOverText.textContent= "Player 1 Wins!";
+            gameOver.classList.remove("hidden");
+        }
     };
 };
 
@@ -148,8 +176,6 @@ class Rook extends ChessPiece{
         }  
     }
 }
-
-
 
 class Knight extends ChessPiece{
      constructor(board, symbol, side, type, x, y){
@@ -377,6 +403,13 @@ class ChessBoard{
         };
         this.#board.push(piece);
     };
+
+    removeFromBoard(piece){
+        let index = this.#board.indexOf(piece)
+        if (index > -1) {
+            this.#board.splice(index, 1)
+        }
+    }
 
     getBoard = () => {
         return this.#board
@@ -626,8 +659,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     for (let piece of board.getBoard()){
                         piece.calculateValidMoves()
                     }
-                    console.log(`White Moves: ${board.getWhiteMoves()}`)
-                    console.log(`Black Moves: ${board.getBlackMoves()}`)
+                    // console.log(`White Moves: ${board.getWhiteMoves()}`)
+                    // console.log(`Black Moves: ${board.getBlackMoves()}`)
             });
         });
 
