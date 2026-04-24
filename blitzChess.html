@@ -17,13 +17,13 @@
     </div>
 
     <div class="btn">
-        <button onclick="resetGame()">Reset</button>
+        <button id="resetBtn">Reset</button>
     </div>
 
     <div class="btn">
-        <button onclick="forfeitGame()">Forfeit</button>
+        <button id="forfeitBtn">Forfeit</button>
     </div>
-    
+
     <div class="timers">
         <span id="p1-timer">00:00</span> <button id="p1-toggle">Pause</button>
         <span id="p2-timer">00:00</span> <button id="p2-toggle">Pause</button>
@@ -130,6 +130,15 @@
                 <td class="chess-square light"  id="H8">♖</td>
             </tr>
         </table>
+        <div id="gameOver" class="game-over hidden">
+        <h2 id="gameOverText"></h2>
+        <div class="greenBtn">
+            <button id="playAgainBtn">Play Again</button>
+        </div>
+        <div class="greenBtn">
+            <button id= "homeBtn">Home</button>
+        </div>
+    </div>
     </div>
 </body>
 </html>
