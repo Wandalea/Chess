@@ -158,11 +158,14 @@ class Timer{
         this.duration = duration;
         this.timerId = timerId
         this.toggleId = toggleId
-        this.toggleId.addEventListener('click', this.handleClick)
+        
         this.intervalId = null
         this.countingDown = false
         this.minutes = null
         this.seconds = null
+        if (window.location.href === "blitzChess.html"){
+            this.toggleId.addEventListener('click', this.handleClick)
+        }
     };
 
     convertTime = (event) => {
@@ -252,7 +255,7 @@ function populateBoard(board){
 };
 
 
-function resetGame(p1Timer, p2Timer) {
+function resetGame(p1Timer = null, p2Timer = null) {
     document.querySelectorAll(".chess-square").forEach(cell => {
         cell.textContent ="";
         cell.style.background="";
@@ -264,11 +267,13 @@ function resetGame(p1Timer, p2Timer) {
     
     board = new ChessBoard();
     populateBoard(board);
-
-    p1Timer.stopTimer();
-    p2Timer.stopTimer();
-    p1Timer.duration = 300;
-    p2Timer.duration = 300;
+    if (window.location.href === "blitzChess.html"){
+        p1Timer.stopTimer();
+        p2Timer.stopTimer();
+        p1Timer.duration = 300;
+        p2Timer.duration = 300;
+    }
+ 
 
     console.log("Game restarted");
 };
@@ -337,15 +342,24 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    p1Timer = new Timer(300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
-    p2Timer = new Timer(300, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
 
     document.getElementById("resetBtn").addEventListener("click", resetGame);
     document.getElementById("forfeitBtn").addEventListener("click", forfeitGame);
-    document.getElementById("playAgainBtn").addEventListener("click", () => { 
-        resetGame(p1Timer, p2Timer);
-        document.getElementById("gameOver").classList.add("hidden");
-    });
+    if (window.location.href === "chess.html"){
+        document.getElementById("playAgainBtn").addEventListener("click", () => { 
+            resetGame();
+            document.getElementById("gameOver").classList.add("hidden");
+        });
+    } else {
+        p1Timer = new Timer(300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
+        p2Timer = new Timer(300, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
+
+        document.getElementById("playAgainBtn").addEventListener("click", () => { 
+            resetGame(p1Timer, p2Timer);
+            document.getElementById("gameOver").classList.add("hidden");
+        });
+    }
+
 
     document.getElementById("homeBtn").addEventListener("click", () => {
         window.location.href = "home.html";
