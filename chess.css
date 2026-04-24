@@ -190,3 +190,21 @@ h1 {
 .hidden {
     display: none;
 }
+
+.timers {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.timer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 160px;
+}
+
+.timer button {
+    padding: 5px 10px;
+}
