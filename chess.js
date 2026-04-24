@@ -1,29 +1,90 @@
-let board;
-let pieceSelected;
-let previousTarget;
-let previousColor;
-
 class ChessPiece{
-    constructor(symbol, side, type, position){
+    constructor(board, symbol, side, type, x, y){
         this.symbol = symbol;
         this.side = side;
         this.type = type;
-        this.position = position;
+        this.x = x;
+        this.y = y;
+        this.coords = x.toString() + this.y
+        this.initialCoords = this.coords
         this.isCaptured = false;
+        board.addToBoard(this);
     };
 
-    moveTo(newPosition){
-        document.getElementById(this.position).textContent = null;
-        this.position = newPosition;
-        document.getElementById(this.position).textContent = this.symbol;
+    moveTo(newCoords, x, y){
+        document.getElementById(this.coords).textContent = null;
+        this.coords = newCoords;
+        this.x = x;
+        this.y = y;
+        document.getElementById(this.coords).textContent = this.symbol;
     };
 
     capture(){
         this.isCaptured = true;
-        document.getElementById(this.position).textContent = null;
+        document.getElementById(this.coords).textContent = null;
         this.position = null;
     };
 };
+
+
+class Pawn extends ChessPiece{
+    constructor(board, symbol, side, type, x, y){
+        super(board, symbol, side, type, x, y)
+        this.validMoves = []
+    }
+
+    calculateValidMoves = (event) => {     
+        if (this.validMoves){
+            this.validMoves = []
+        }   
+        if (this.coords === this.initialCoords){
+            if (this.side === "Black"){    
+                this.validMoves.push(this.x + (this.y + 2).toString())
+            }
+        }
+        this.validMoves.push(this.x + (this.y + 1).toString())
+    }
+}
+
+
+class Rook extends ChessPiece{
+    constructor(board, symbol, side, type, x, y){
+        super(board, symbol, side, type, x, y)
+        this.validMoves = []
+    }
+}
+
+
+class Knight extends ChessPiece{
+     constructor(board, symbol, side, type, x, y){
+        super(board, symbol, side, type, x, y)
+        this.validMoves = []
+    }   
+}
+
+
+class Bishop extends ChessPiece{
+    constructor(board, symbol, side, type, x, y){
+        super(board, symbol, side, type, x, y)
+        this.validMoves = []
+    }    
+}
+
+
+class Queen extends ChessPiece{
+    constructor(board, symbol, side, type, x, y){
+        super(board, symbol, side, type, x, y)
+        this.validMoves = []
+    }    
+}
+
+
+class King extends ChessPiece{
+    constructor(board, symbol, side, type, x, y){
+        super(board, symbol, side, type, x, y)
+        this.validMoves = []
+    }    
+}
 
 
 class ChessBoard{
@@ -40,6 +101,10 @@ class ChessBoard{
         };
         this.#board.push(piece);
     };
+
+    getBoard = () => {
+        return this.#board
+    }
 };
 
 
@@ -100,55 +165,40 @@ class Timer{
 };
 
 
-function createPiece(board, symbol, side, type, position){
-   let piece = new ChessPiece(symbol, side, type, position);
-    // Random Position
-    // board_letters = ['A','B','C','D','E','F','G','H']
-    // board_numbers = [1,2,3,4,5,6,7,8]
-    // piece.moveTo(
-    //       board_letters[Math.floor(Math.random()*8)]
-    //     + board_numbers[Math.floor(Math.random()*8)]
-    // );
-    board.addToBoard(piece);
-    document.getElementById(position).textContent =symbol;
-    return piece;
-};
-
-
 function populateBoard(board){
     // Create all pieces and add them to board
-    createPiece(board, "♙", "White", "Pawn", "B1");
-    createPiece(board, "♙", "White", "Pawn", "B2");
-    createPiece(board, "♙", "White", "Pawn", "B3");
-    createPiece(board, "♙", "White", "Pawn", "B4");
-    createPiece(board, "♙", "White", "Pawn", "B5");
-    createPiece(board, "♙", "White", "Pawn", "B6");
-    createPiece(board, "♙", "White", "Pawn", "B7");
-    createPiece(board, "♙", "White", "Pawn", "B8");
-    createPiece(board, "♟", "Black", "Pawn", "G1");
-    createPiece(board, "♟", "Black", "Pawn", "G2");
-    createPiece(board, "♟", "Black", "Pawn", "G3");
-    createPiece(board, "♟", "Black", "Pawn", "G4");
-    createPiece(board, "♟", "Black", "Pawn", "G5");
-    createPiece(board, "♟", "Black", "Pawn", "G6");
-    createPiece(board, "♟", "Black", "Pawn", "G7");
-    createPiece(board, "♟", "Black", "Pawn", "G8");
-    createPiece(board, "♖", "White", "Rook", "A1");
-    createPiece(board, "♖", "White", "Rook", "A8");
-    createPiece(board, "♜", "Black", "Rook", "H1");
-    createPiece(board, "♜", "Black", "Rook", "H8");
-    createPiece(board, "♘", "White", "Knight", "A2");
-    createPiece(board, "♘", "White", "Knight", "A7");
-    createPiece(board, "♞", "Black", "Knight", "H2");
-    createPiece(board, "♞", "Black", "Knight", "H7");
-    createPiece(board, "♗", "White", "Bishop", "A3");
-    createPiece(board, "♗", "White", "Bishop", "A6");
-    createPiece(board, "♝", "Black", "Bishop", "H3");
-    createPiece(board, "♝", "Black", "Bishop", "H6");
-    createPiece(board, "♕", "White", "Queen", "A4");
-    createPiece(board, "♛", "Black", "Queen", "H4");
-    createPiece(board, "♔", "White", "King", "A5");
-    createPiece(board, "♚", "Black", "King", "H5");
+    new Pawn(board, "♙", "White", "Pawn", 1, 7);
+    new Pawn(board, "♙", "White", "Pawn", 2, 7);
+    new Pawn(board, "♙", "White", "Pawn", 3, 7);
+    new Pawn(board, "♙", "White", "Pawn", 4, 7);
+    new Pawn(board, "♙", "White", "Pawn", 5, 7);
+    new Pawn(board, "♙", "White", "Pawn", 6, 7);
+    new Pawn(board, "♙", "White", "Pawn", 7, 7);
+    new Pawn(board, "♙", "White", "Pawn", 8, 7);
+    new Pawn(board, "♟", "Black", "Pawn", 1, 2);
+    new Pawn(board, "♟", "Black", "Pawn", 2, 2);
+    new Pawn(board, "♟", "Black", "Pawn", 3, 2);
+    new Pawn(board, "♟", "Black", "Pawn", 4, 2);
+    new Pawn(board, "♟", "Black", "Pawn", 5, 2);
+    new Pawn(board, "♟", "Black", "Pawn", 6, 2);
+    new Pawn(board, "♟", "Black", "Pawn", 7, 2);
+    new Pawn(board, "♟", "Black", "Pawn", 8, 2);
+    new Rook(board, "♖", "White", "Rook", 1, 8);
+    new Rook(board, "♖", "White", "Rook", 8, 8);
+    new Rook(board, "♜", "Black", "Rook", 1, 1);
+    new Rook(board, "♜", "Black", "Rook", 8, 1);
+    new Knight(board, "♘", "White", "Knight", 2, 8);
+    new Knight(board, "♘", "White", "Knight", 7, 8);
+    new Knight(board, "♞", "Black", "Knight", 2, 1);
+    new Knight(board, "♞", "Black", "Knight", 7, 1);
+    new Bishop(board, "♗", "White", "Bishop", 3, 8);
+    new Bishop(board, "♗", "White", "Bishop", 6, 8);
+    new Bishop(board, "♝", "Black", "Bishop", 3, 1);
+    new Bishop(board, "♝", "Black", "Bishop", 6, 1);
+    new Queen(board, "♕", "White", "Queen", 4, 8);
+    new Queen(board, "♛", "Black", "Queen", 4, 1);
+    new King(board, "♔", "White", "King", 5, 8);
+    new King(board, "♚", "Black", "King", 5, 1);
 };
 
 
@@ -168,95 +218,52 @@ function resetGame() {
     console.log("Game restarted");
 };
 
-function forfeitGame() {
-    let confirmForfeit = confirm("Are you sure you want to forfeit the game?");
-
-    if(confirmForfeit){
-        const gameOver= document.getElementById("gameOver");
-        const gameOverText = document.getElementById("gameOverText");
-
-        gameOverText.textContent= "The other player won the game!";
-        gameOver.classList.remove("hidden");
-    }
-}
 
 document.addEventListener("DOMContentLoaded", () => {
-        const resetBtn = document.getElementById("resetBtn");
-        resetBtn.addEventListener("click", resetGame);
-
-        const forfeitBtn = document.getElementById("forfeitBtn");
-        forfeitBtn.addEventListener("click", forfeitGame);
-
-        const gameOver = document.getElementById("gameOver");
-        
-        const playAgainBtn = document.getElementById("playAgainBtn");
-        playAgainBtn.addEventListener("click", () => { 
-            resetGame();
-            gameOver.classList.add("hidden");});
-
-        const homeBtn = document.getElementById("homeBtn");
-        homeBtn.addEventListener("click", () => {
-            window.location.href = "home.html";
-        });
-});
-
-
-
-document.addEventListener("DOMContentLoaded", () => {
+    board = new ChessBoard
+    populateBoard(board)
+    
     let pieceSelected;
     let previousTarget;
     let previousColor;
-    const chessSquare = document.querySelectorAll('.chess-square');
+    document.querySelectorAll('td').forEach(cell => {
+        cell.addEventListener('click', function(event) {
+            const x = cell.cellIndex;
+            const y = cell.parentNode.rowIndex;
+            const coords = x.toString()+y;
+            const currentCell = event.currentTarget;
+            const clickedPiece = board.getBoard().find(piece => piece.coords === coords);
 
-    chessSquare.forEach(square => {
-        square.addEventListener('click', function(event) {
-            // If same square clicked back to back
-            if (event.currentTarget === previousTarget){
-                console.log("Invalid move");
-            }
+                if (clickedPiece && !pieceSelected){
+                    pieceSelected = clickedPiece;
+                    previousTarget = currentCell;
+                    previousColor = getComputedStyle(currentCell).getPropertyValue("background-color");
+                    currentCell.style.background = "green";
+                    pieceSelected.calculateValidMoves();
+                    console.log(`Valid Moves: ${pieceSelected.validMoves}`);
+                    console.log(`Selected Cell: ${coords}`);
+                }
 
-            // If empty square is clicked and a piece is selected
-            else if (!event.currentTarget.textContent && pieceSelected) {
-                console.log(`Move To: ${event.currentTarget.id}`);
+                // If empty square is clicked and a piece is selected
+                if (pieceSelected && !clickedPiece){
+                    if (pieceSelected.validMoves.includes(coords)){
+                        pieceSelected.moveTo(currentCell.id, x, y)
+                        console.log(`Move To: ${currentCell.id} Coords: ${coords}`)
+                        previousTarget.textContent = ""
+                        previousTarget.style.background = previousColor;
+                        pieceSelected = null
+                        previousTarget = null;
+                    }
+                }
 
-                event.currentTarget.textContent = pieceSelected;
-                pieceSelected = null;
-
-                previousTarget.style.background = previousColor;
-                previousColor = getComputedStyle(event.currentTarget).getPropertyValue("background-color");
-                previousTarget.textContent = null;
-            }
-
-            // If occupied square is clicked and a piece is selected
-            else if (event.currentTarget.textContent && pieceSelected) {
-
-            }
-
-            // If occupied square is clicked
-            else if (event.currentTarget.textContent) {
-
-
-                previousColor = getComputedStyle(event.currentTarget).getPropertyValue("background-color");
-                square.style.background = "green";
-
-                pieceSelected = event.currentTarget.textContent;
-                previousTarget = event.currentTarget;
-                console.log(`Square Selected: ${event.currentTarget.id}`);
-            }
-
-            else {
-                console.log("Empty square");
-            };
+                // If same square clicked back to back
+                if (clickedPiece === pieceSelected){
+                    pieceSelected = null
+                    previousTarget.style.background = previousColor;
+                }
         });
     });
 
-    board = new ChessBoard();
-    populateBoard(board)
-    console.log(board);
-
     p1Timer = new Timer(300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
     p2Timer = new Timer(120, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
-    console.log(p1Timer);
-    console.log(p2Timer);
 });
-
