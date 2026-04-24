@@ -35,9 +35,7 @@ class Pawn extends ChessPiece{
     }
 
     calculateValidMoves = (event) => {     
-        if (this.validMoves){
-            this.validMoves = []
-        }   
+        this.validMoves = []
 
         if (this.side === "Black"){ 
             if (this.coords === this.initialCoords){
@@ -71,8 +69,60 @@ class Rook extends ChessPiece{
     }
 
     calculateValidMoves = (event) => {     
-        if (this.validMoves){
-            this.validMoves = []
+        this.validMoves = []
+
+        // Up
+        for (let i = this.y; i > 0; i--){
+            console.log(this.y - i)
+            if (this.y - i > 0){
+                let target = (this.x) + (this.y - i).toString()
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                } else {
+                    break
+                }   
+            } 
+        }
+
+        // Down
+        for (let i = this.y; i < 9; i++){
+            console.log(this.y + i)
+            if (this.y + i < 9){
+                let target = (this.x) + (this.y + i).toString()
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                } else {
+                    break
+                }  
+            }  
+        }
+
+        // Left
+
+        for (let i = this.x; i > 0; i--){
+            console.log(this.x - i)
+            if (this.x - i > 0){
+                let target = (this.x - i) + (this.y).toString()
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                } else {
+                    break
+                }
+            }
+        }
+
+        // Right
+
+        for (let i = this.x; i < 9; i++){
+            console.log(this.x + i)
+            if (this.x + i < 9){
+                let target = (this.x + i) + (this.y).toString()
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                } else {
+                    break
+                }    
+            }
         }
     }
 }
@@ -214,15 +264,20 @@ class ChessBoard{
 
 
 class Timer{
-    constructor(duration, timerId, toggleId){
+    constructor(name, duration, timerId, toggleId){
+        this.name = name;
         this.duration = duration;
-        this.timerId = timerId
-        this.toggleId = toggleId
+        this.timerId = timerId;
+        this.toggleId = toggleId;
         
-        this.intervalId = null
-        this.countingDown = false
-        this.minutes = null
-        this.seconds = null
+        this.intervalId = null;
+        this.countingDown = false;
+        this.minutes = null;
+        this.seconds = null;
+        this.other = null;
+        if (this.name === "p1Timer"){
+            this.startTimer()
+        }
         if (window.document.title === "Blitz Chess"){
             this.toggleId.addEventListener('click', this.handleClick)
         }
@@ -245,7 +300,8 @@ class Timer{
             this.convertTime()
             --this.duration
             this.updateDisplay()
-            this.toggleId.textContent = "Pause"
+            this.toggleId.disabled = false
+            this.toggleId.textContent = "End Turn"
             if (this.duration < 0) {
                 console.log("Times up!");
                 clearInterval(this.intervalId)
@@ -256,16 +312,17 @@ class Timer{
 
     stopTimer = (event) => {
         clearInterval(this.intervalId)
-        this.toggleId.textContent = "Play"
+        this.toggleId.disabled = true
+        this.toggleId.textContent = "Waiting"
         this.countingDown = false
+        this.other.startTimer()
     };
 
     addToTimer = (event) => {
-        this.duration += 2
-        console.log(this.duration);
+        this.duration += 3
     }
 
-    handleClick = (event) => {
+    handleClick = (event, other) => {
         if(this.countingDown){
             this.stopTimer()
             this.addToTimer()
@@ -419,8 +476,10 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("gameOver").classList.add("hidden");
         });
     } else {
-        p1Timer = new Timer(300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
-        p2Timer = new Timer(300, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
+        p1Timer = new Timer("p1Timer", 300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
+        p2Timer = new Timer("p2Timer", 300, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
+        p1Timer.other = p2Timer
+        p2Timer.other = p1Timer
 
         document.getElementById("playAgainBtn").addEventListener("click", () => { 
             resetGame(p1Timer, p2Timer);
