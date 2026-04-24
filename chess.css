@@ -8,13 +8,14 @@
 body {
     margin: 0;
     min-height: 100vh;
+    text-align: center;
 }
 
 .board{
     justify-content: center;
     display: flex;
     align-items: center;
-    min-height: 100vh;
+    /* min-height: 100vh; */
 
 }
 
@@ -28,9 +29,8 @@ body {
 }
 
 .btn {
-    display: flex;
-    justify-content: center;
-    margin: 20px 5px;
+    display: inline-block;
+    margin: 20px 10px;
 }
 
 .btn a, .btn button {
@@ -74,9 +74,11 @@ body {
 .title {
     text-align: center;
     background-color: rgba(255, 255, 255, 0.9);
-    padding: 40px;
+    padding: 40px 0px;
     border-radius: 12px;
     text-decoration: underline;
+    width: 100%;
+    box-sizing: border-box;
     
 }
 
@@ -95,7 +97,7 @@ body {
 
 h1 {
     font-size: 48px;
-    margin-bottom: 20px;
+    margin: 0px;
 }
 
 .chess-types {
