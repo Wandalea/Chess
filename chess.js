@@ -302,8 +302,12 @@ class Timer{
             this.updateDisplay()
             this.toggleId.disabled = false
             this.toggleId.textContent = "End Turn"
+
             if (this.duration < 0) {
-                console.log("Times up!");
+                const gameOver= document.getElementById("gameOver");
+                const gameOverText = document.getElementById("gameOverText");
+                gameOverText.textContent= "The other player won the game!";
+                gameOver.classList.remove("hidden");
                 clearInterval(this.intervalId)
                 this.countingDown = false
             }
@@ -399,7 +403,9 @@ function resetGame(p1Timer = null, p2Timer = null) {
 function forfeitGame() {
     let confirmForfeit = confirm("Are you sure you want to forfeit the game?");
 
-    if(confirmForfeit){
+    if(!confirmForfeit){
+        return
+    } else {
         const gameOver= document.getElementById("gameOver");
         const gameOverText = document.getElementById("gameOverText");
 
@@ -410,86 +416,87 @@ function forfeitGame() {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    board = new ChessBoard
-    populateBoard(board)
-    
-    let pieceSelected = null;
-    let previousTarget = null;
-    let previousColor = null;
-    document.querySelectorAll('td').forEach(cell => {
-        cell.addEventListener('click', function(event) {
-            const x = cell.cellIndex;
-            const y = cell.parentNode.rowIndex;
-            const coords = x.toString()+y;
-            const currentCell = event.currentTarget;
-            const clickedPiece = board.getBoard().find(piece => piece.coords === coords);
+    if (window.document.title !== "Play chess"){
+        board = new ChessBoard
+        populateBoard(board)
+        
+        let pieceSelected = null;
+        let previousTarget = null;
+        let previousColor = null;
+        document.querySelectorAll('td').forEach(cell => {
+            cell.addEventListener('click', function(event) {
+                const x = cell.cellIndex;
+                const y = cell.parentNode.rowIndex;
+                const coords = x.toString()+y;
+                const currentCell = event.currentTarget;
+                const clickedPiece = board.getBoard().find(piece => piece.coords === coords);
 
-                if (clickedPiece && !pieceSelected){
-                    pieceSelected = clickedPiece;
-                    previousTarget = currentCell;
-                    previousColor = getComputedStyle(currentCell).getPropertyValue("background-color");
-                    currentCell.style.background = "green";
-                    
-                    pieceSelected.calculateValidMoves();
-                    console.log(`Valid Moves: ${pieceSelected.validMoves}`);
-                    console.log(`Selected Cell: ${coords}`);
-                }
+                    if (clickedPiece && !pieceSelected){
+                        pieceSelected = clickedPiece;
+                        previousTarget = currentCell;
+                        previousColor = getComputedStyle(currentCell).getPropertyValue("background-color");
+                        currentCell.style.background = "green";
+                        
+                        pieceSelected.calculateValidMoves();
+                        console.log(`Valid Moves: ${pieceSelected.validMoves}`);
+                        console.log(`Selected Cell: ${coords}`);
+                    }
 
-                // If empty square is clicked and a piece is selected
-                else if (pieceSelected && !clickedPiece){
-                    if (pieceSelected.validMoves.includes(coords)){
+                    // If empty square is clicked and a piece is selected
+                    else if (pieceSelected && !clickedPiece){
+                        if (pieceSelected.validMoves.includes(coords)){
+                            pieceSelected.moveTo(currentCell.id, x, y)
+                            console.log(`Move To: ${currentCell.id} Coords: ${coords}`)
+                            previousTarget.textContent = ""
+                            previousTarget.style.background = previousColor;
+                            pieceSelected = null
+                            previousTarget = null;
+                        } else {
+                            console.log("invalid move");
+                        }
+                    }
+
+                    else if (pieceSelected && clickedPiece && pieceSelected.side !== clickedPiece.side){
+                        clickedPiece.capture(clickedPiece)
                         pieceSelected.moveTo(currentCell.id, x, y)
                         console.log(`Move To: ${currentCell.id} Coords: ${coords}`)
                         previousTarget.textContent = ""
                         previousTarget.style.background = previousColor;
                         pieceSelected = null
                         previousTarget = null;
-                    } else {
-                        console.log("invalid move");
                     }
-                }
 
-                else if (pieceSelected && clickedPiece && pieceSelected.side !== clickedPiece.side){
-                    clickedPiece.capture(clickedPiece)
-                    pieceSelected.moveTo(currentCell.id, x, y)
-                    console.log(`Move To: ${currentCell.id} Coords: ${coords}`)
-                    previousTarget.textContent = ""
-                    previousTarget.style.background = previousColor;
-                    pieceSelected = null
-                    previousTarget = null;
-                }
-
-                // If same square clicked back to back
-                else if (clickedPiece === pieceSelected){
-                    pieceSelected = null
-                    previousTarget.style.background = previousColor;
-                }
+                    // If same square clicked back to back
+                    else if (clickedPiece === pieceSelected){
+                        pieceSelected = null
+                        previousTarget.style.background = previousColor;
+                    }
+            });
         });
-    });
 
 
-    document.getElementById("resetBtn").addEventListener("click", resetGame);
-    document.getElementById("forfeitBtn").addEventListener("click", forfeitGame);
-    if (window.document.title === "Chess"){
-        document.getElementById("playAgainBtn").addEventListener("click", () => { 
-            resetGame();
-            document.getElementById("gameOver").classList.add("hidden");
+        document.getElementById("resetBtn").addEventListener("click", resetGame);
+        document.getElementById("forfeitBtn").addEventListener("click", forfeitGame);
+        if (window.document.title === "Chess"){
+            document.getElementById("playAgainBtn").addEventListener("click", () => { 
+                resetGame();
+                document.getElementById("gameOver").classList.add("hidden");
+            });
+        } else {
+            p1Timer = new Timer("p1Timer", 300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
+            p2Timer = new Timer("p2Timer", 300, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
+            p1Timer.other = p2Timer
+            p2Timer.other = p1Timer
+
+            document.getElementById("playAgainBtn").addEventListener("click", () => { 
+                resetGame(p1Timer, p2Timer);
+                document.getElementById("gameOver").classList.add("hidden");
+            });
+        }
+
+
+        document.getElementById("homeBtn").addEventListener("click", () => {
+            window.location.href = "home.html";
         });
-    } else {
-        p1Timer = new Timer("p1Timer", 300, document.querySelector('#p1-timer'), document.querySelector('#p1-toggle'))
-        p2Timer = new Timer("p2Timer", 300, document.querySelector('#p2-timer'), document.querySelector('#p2-toggle'))
-        p1Timer.other = p2Timer
-        p2Timer.other = p1Timer
-
-        document.getElementById("playAgainBtn").addEventListener("click", () => { 
-            resetGame(p1Timer, p2Timer);
-            document.getElementById("gameOver").classList.add("hidden");
-        });
-    }
-
-
-    document.getElementById("homeBtn").addEventListener("click", () => {
-        window.location.href = "home.html";
-    });
-
+   }
 });
