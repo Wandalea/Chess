@@ -22,8 +22,8 @@ class ChessPiece{
 
     capture(){
         this.isCaptured = true;
-        document.getElementById(this.coords).textContent = null;
-        this.position = null;
+        // document.getElementById(this.coords).textContent = null;
+        this.position = document.getElementById("0");
     };
 };
 
@@ -38,19 +38,28 @@ class Pawn extends ChessPiece{
         if (this.validMoves){
             this.validMoves = []
         }   
-        if (this.side === "Black"){  
+
+        if (this.side === "Black"){ 
             if (this.coords === this.initialCoords){
-                    this.validMoves.push(this.x + (this.y + 2).toString())
-                }
-                this.validMoves.push(this.x + (this.y + 1).toString())
+                let target = (this.x + (this.y + 2).toString())
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                } 
+            }
+            if (this.y + 1 < 9){
+                let target = this.x + (this.y + 1).toString()
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                }       
+            }
         } else {
-            if (this.coords === this.initialCoords){
-                    this.validMoves.push(this.x + (this.y - 2).toString())
-                }
-                this.validMoves.push(this.x + (this.y - 1).toString())
+            if (this.y - 1 > 0){
+                let target = this.x + (this.y - 1).toString()
+                if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                    this.validMoves.push(target)
+                }     
+            }
         }
-        
-        
     }
 }
 
@@ -65,7 +74,6 @@ class Rook extends ChessPiece{
         if (this.validMoves){
             this.validMoves = []
         }
-        this.validMoves.push(this.x + (this.y + 1).toString())
     }
 }
 
@@ -80,8 +88,64 @@ class Knight extends ChessPiece{
     calculateValidMoves = (event) => {     
         if (this.validMoves){
             this.validMoves = []
-        }   
-        this.validMoves.push(this.x + (this.y + 1).toString())
+        }
+
+        // Up
+        if (this.x + 1 < 9 && this.y + 2 < 9){
+            let target = (this.x + 1) + (this.y + 2).toString()
+            if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                this.validMoves.push(target)
+            }       
+        }
+
+        if (this.x - 1 > 0 && this.y + 2 < 9){
+            let target = (this.x - 1) + (this.y + 2).toString()
+            if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                this.validMoves.push(target)
+            }       
+        }
+        
+        // Down
+        if (this.x + 1 < 9 && this.y - 2 > 0){
+            let target = (this.x + 1) + (this.y - 2).toString()
+            if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                this.validMoves.push(target)
+            }       
+        }
+        if (this.x - 1 > 0 && this.y - 2 > 0){
+            let target = (this.x - 1) + (this.y - 2).toString()
+            if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                this.validMoves.push(target)
+            }       
+        }
+        
+        // Left
+        if (this.x - 2 > 0 && this.y + 1 < 9){
+            let target = (this.x - 2) + (this.y + 1).toString()
+            if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                this.validMoves.push(target)
+            }       
+        }
+        if (this.x - 2 > 0 && this.y - 1 > 0){
+            let target = (this.x - 2) + (this.y - 1).toString()
+            if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                this.validMoves.push(target)
+            }       
+        }
+        
+        //Right
+        if (this.x + 2 < 9 && this.y + 1 < 9){
+            let target = (this.x + 2) + (this.y + 1).toString()
+            if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                this.validMoves.push(target)
+            }
+        }
+        if (this.x + 2 < 9 && this.y - 1 > 0){
+            let target = (this.x + 2) + (this.y - 1).toString()
+            if (!board.getBoard().find(piece => piece.coords === target && piece.side === this.side)){
+                this.validMoves.push(target)
+            }     
+        }
     }
 }
 
@@ -95,9 +159,7 @@ class Bishop extends ChessPiece{
     calculateValidMoves = (event) => {     
         if (this.validMoves){
             this.validMoves = []
-        }   
-        
-        this.validMoves.push(this.x + (this.y + 1).toString())
+        }
     }
 }
 
@@ -111,8 +173,7 @@ class Queen extends ChessPiece{
     calculateValidMoves = (event) => {     
         if (this.validMoves){
             this.validMoves = []
-        }   
-        this.validMoves.push(this.x + (this.y + 1).toString())
+        }
     }
 }
 
@@ -126,8 +187,7 @@ class King extends ChessPiece{
     calculateValidMoves = (event) => {     
         if (this.validMoves){
             this.validMoves = []
-        }   
-        this.validMoves.push(this.x + (this.y + 1).toString())
+        }
     }
 }
 
@@ -201,7 +261,7 @@ class Timer{
     };
 
     addToTimer = (event) => {
-        this.duration += 20
+        this.duration += 2
         console.log(this.duration);
     }
 
@@ -312,8 +372,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     previousTarget = currentCell;
                     previousColor = getComputedStyle(currentCell).getPropertyValue("background-color");
                     currentCell.style.background = "green";
-                    console.log(currentCell);
-                    
                     
                     pieceSelected.calculateValidMoves();
                     console.log(`Valid Moves: ${pieceSelected.validMoves}`);
@@ -332,6 +390,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     } else {
                         console.log("invalid move");
                     }
+                }
+
+                else if (pieceSelected && clickedPiece && pieceSelected.side !== clickedPiece.side){
+                    clickedPiece.capture(clickedPiece)
+                    pieceSelected.moveTo(currentCell.id, x, y)
+                    console.log(`Move To: ${currentCell.id} Coords: ${coords}`)
+                    previousTarget.textContent = ""
+                    previousTarget.style.background = previousColor;
+                    pieceSelected = null
+                    previousTarget = null;
                 }
 
                 // If same square clicked back to back
